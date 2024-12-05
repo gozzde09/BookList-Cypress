@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  tests:
+  cypress-run:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +20,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
+
       - name: Set up Docker Compose
         run: docker compose up -d # This will start your containers in the background
+
       - name: Build Docker Compose services
         run: docker compose build
-      # docker compose up --build -d
+
       - name: Wait for services to become healthy
         run: |
           docker compose ps &
@@ -35,11 +37,11 @@ jobs:
           echo "Running Cypress E2E Tests"
           docker compose run cypress npx cypress run --e2e
 
-     -  name: Run Cypress Component Tests
+      - name: Run Cypress Component Tests
         run: |
-           echo "Running Cypress Component Tests"
-           docker compose run cypress npm ci
-           docker compose run cypress npx cypress run --component
+          echo "Running Cypress Component Tests"
+          docker compose run cypress npm ci
+          docker compose run cypress npx cypress run --component
 
       - name: Tear down Docker Compose
         if: always()
