@@ -4,14 +4,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend-book
+    environment:
+    - NODE_ENV=development
+    - VITE_COVERAGE=true
     ports:
       - '80:80'
     depends_on:
       - backend
-    healthcheck:
-      # test: curl --silent --fail http://localhost || exit 1
-      interval: 10s
-      retries: 5
     networks:
       - book-net
 

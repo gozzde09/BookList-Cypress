@@ -4,10 +4,28 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+
+    services:
+      database:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+        options: >-
+          --health-cmd "pg_isready -U test_user"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout repository
@@ -16,19 +34,32 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      # Install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build Docker Compose services
+      - name: Build and start Docker Compose services
         run: |
-          docker-compose -f docker-compose.yml build &
-          sleep 10
+          docker compose up -d --build
 
-      - name: Run Cypress E2E tests
-        run: docker compose up --exit-code-from cypress
+      - name: Wait for services to become healthy
+        run: |
+          docker compose ps
 
-      - name: Shutdown Docker Compose
-        run: docker-compose -f docker-compose.yml down # Clean up after the tests
+      - name: Run Cypress Component Tests
+        run: |
+          docker compose run cypress npx cypress run --component
+
+      - name: Run Cypress E2E Tests
+        run: |
+          docker compose run cypress npx cypress run --e2e
+
+      - name: Tear down Docker Compose
+        if: always()
+        run: |
+          docker compose down --volumes
+
+# docker compose up -d --build
+# sleep 10
+# docker compose run cypress

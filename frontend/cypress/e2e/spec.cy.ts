@@ -11,7 +11,7 @@ describe("My BookList app", function () {
       );
     });
     //VISIT THE PAGE
-    cy.visit("http://localhost/");
+    cy.visit("/");
   });
 
   //Table-headers
