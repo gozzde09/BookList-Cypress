@@ -62,7 +62,3 @@ jobs:
         if: always()
         run: |
           docker compose down --volumes
-
-networks:
-  book-net:
-    driver: bridge
