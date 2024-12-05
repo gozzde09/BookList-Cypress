@@ -33,20 +33,20 @@ jobs:
 
       - name: Set up Docker Compose environment
         run: |
-          docker-compose -f docker-compose.yml up -d
+          docker compose -f docker-compose.yml up -d
 
       - name: Wait for services to become healthy
         run: |
-          docker-compose ps
+          docker compose ps
           sleep 30
 
       - name: Install dependencies
-        run: docker-compose run cypress sh -c "rm -rf node_modules && npm ci"
+        run: docker compose run cypress sh -c "rm -rf node_modules && npm ci"
 
       - name: Run Cypress Tests
         run: |
-          docker-compose run --rm cypress
+          docker compose run --rm cypress
 
       - name: Stop and remove containers
         run: |
-          docker-compose down
+          docker compose down
