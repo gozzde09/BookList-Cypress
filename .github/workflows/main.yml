@@ -28,6 +28,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set PGURI environment variable
+        run: echo "PGURI=postgres://${{ secrets.DB_USER }}:${{ secrets.PASSWORD }}@database:5432/${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
@@ -35,21 +38,26 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
+
       - name: Build and start Docker Compose services
         run: |
           docker compose up --build -d
+
       - name: Wait for services to become healthy
         run: |
           docker compose ps &
           sleep 15
+
       - name: Run Cypress Component Tests
         run: |
           echo "Using PGURI: $PGURI"
           docker compose run cypress npx cypress run --component
+
       - name: Run Cypress E2E Tests
         run: |
           echo "Using PGURI: $PGURI"
           docker compose run cypress npx cypress run --e2e
+
       - name: Tear down Docker Compose
         if: always()
         run: |
@@ -58,3 +66,8 @@ jobs:
 # docker compose up -d --build
 # sleep 10
 # docker compose run cypress
+
+DB_USER: postgres
+PASSWORD: secret
+DB_NAME: postgres
+PGURI: postgres://postgres:secret@database:5432/postgres
