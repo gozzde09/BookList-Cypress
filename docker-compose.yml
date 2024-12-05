@@ -58,6 +58,7 @@ services:
     # share the current folder as volume to avoid copying
     volumes: # component testlerini bağla
       - ./frontend:/frontend
+      - ./coverage:/coverage
       - .:/app
     networks:
       - book-net
