@@ -1,0 +1,53 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches:
+      - main # Ana branch'e push yapıldığında çalışsın
+  pull_request:
+    branches:
+      - main # Ana branch'e pull request açıldığında çalışsın
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest # CI işlemi için Ubuntu kullanacağız
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.PG_DB_NAME }}
+          POSTGRES_USER: ${{ secrets.PG_USER }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.PG_USER }}"
+          --health-interval=10s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run Cypress tests (Headless mode)
+        run: |
+          cd frontend
+          npx cypress run --headless --browser chrome  # Başka bir tarayıcı kullanabilirsiniz
+
+      - name: Upload Cypress results as artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-results
+          path: frontend/cypress/results # Test sonuçlarını kaydet
