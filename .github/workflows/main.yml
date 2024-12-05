@@ -9,23 +9,23 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
 
-    services:
-      database:
-        image: postgres:latest
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-        volumes:
-          - ./data:/var/lib/postgresql/data
-          - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-        ports:
-          - 5432:5432
+    # services:
+    #   database:
+    #     image: postgres:latest
+    #     env:
+    #       POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
+    #       POSTGRES_DB: ${{ secrets.DB_NAME }}
+    #       POSTGRES_USER: ${{ secrets.DB_USER }}
+    #     options: >-
+    #       --health-cmd "pg_isready -U postgres"
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 3
+    #     volumes:
+    #       - ./data:/var/lib/postgresql/data
+    #       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    #     ports:
+    #       - 5432:5432
 
     steps:
       - name: Checkout repository
