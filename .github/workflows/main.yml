@@ -8,21 +8,6 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    services:
-      database:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: secret
-          POSTGRES_DB: postgres
-        options: >-
-          --health-cmd "pg_isready -U postgres -d postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-          --start-period 30s
-        ports:
-          - 5432:5432
 
     steps:
       - name: Checkout repository
@@ -35,26 +20,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
-
       - name: Build and start Docker Compose services
         run: |
-          docker-compose up --build -d
-
-      - name: Wait for DB to be ready
+          docker compose up --build -d
+      - name: Wait for services to become healthy
         run: |
-          sleep 30  # Allow enough time for the database to initialize
-
+          docker compose ps &
+          sleep 30
       - name: Run Cypress Component Tests
         run: |
           echo "Running Cypress Component Tests"
-          docker-compose run cypress npx cypress run --component
-
+          docker compose run cypress npx cypress run --component
       - name: Run Cypress E2E Tests
         run: |
           echo "Running Cypress E2E Tests"
-          docker-compose run cypress npx cypress run --e2e
-
+          docker compose run cypress npx cypress run --e2e
       - name: Tear down Docker Compose
         if: always()
         run: |
-          docker-compose down --volumes
+          docker compose down --volumes
