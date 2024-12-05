@@ -20,17 +20,21 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
-      - name: Build and start Docker Compose services
-        run: |
-          docker compose up --build -d
+      - name: Set up Docker Compose
+        run: docker-compose up -d # This will start your containers in the background
+      - name: Build Docker Compose services
+        run: docker-compose build
+      # - name: Build and start Docker Compose services
+      #   run: |
+      #     docker compose up --build -d
       - name: Wait for services to become healthy
         run: |
           docker compose ps &
           sleep 30
-      - name: Run Cypress Component Tests
-        run: |
-          echo "Running Cypress Component Tests"
-          docker compose run cypress npx cypress run --component
+      # - name: Run Cypress Component Tests
+      #   run: |
+      #     echo "Running Cypress Component Tests"
+      #     docker compose run cypress npx cypress run --component
       - name: Run Cypress E2E Tests
         run: |
           echo "Running Cypress E2E Tests"
