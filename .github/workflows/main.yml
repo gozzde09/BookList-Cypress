@@ -9,15 +9,15 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
 
-    services:
+      services:
       database:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: secret
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
         options: >-
-          --health-cmd "pg_isready -U postgres"
+          --health-cmd "pg_isready -U test_user"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
