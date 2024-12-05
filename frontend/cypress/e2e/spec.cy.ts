@@ -2,13 +2,11 @@ describe("My BookList app", function () {
   beforeEach(() => {
     //GET BOOKS
     cy.fixture("books").then((json) => {
-      cy.intercept("GET", "http://localhost/api/books", json).as("getBooks");
+      cy.intercept("GET", "/api/books", json).as("getBooks");
     });
     //GET LANGUAGES
     cy.fixture("languages").then((json) => {
-      cy.intercept("GET", "http://localhost/api/languages", json).as(
-        "getLanguages"
-      );
+      cy.intercept("GET", "/api/languages", json).as("getLanguages");
     });
     //VISIT THE PAGE
     cy.visit("/");

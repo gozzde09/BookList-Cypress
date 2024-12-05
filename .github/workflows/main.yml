@@ -41,11 +41,12 @@ jobs:
 
       - name: Build and start Docker Compose services
         run: |
-          docker compose up -d --build
+          docker compose up --build -d
 
       - name: Wait for services to become healthy
         run: |
-          docker compose ps
+          docker compose ps &
+          sleep 15
 
       - name: Run Cypress Component Tests
         run: |
