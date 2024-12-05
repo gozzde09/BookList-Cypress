@@ -61,9 +61,13 @@ services:
     volumes: # component testlerini bağla
       - ./frontend:/frontend
       - ./coverage:/coverage
+      - ./frontend/.nyc_output:/frontend/.nyc_output
+      - ./coverage:/coverage
       - .:/app
     networks:
       - book-net
+    command: |
+      - sh -c "npm ci && npx cypress run --component"
 
 networks:
   book-net:

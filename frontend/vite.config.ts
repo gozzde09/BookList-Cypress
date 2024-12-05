@@ -13,6 +13,7 @@ export default defineConfig({
       exclude: ["node_modules", "test/"],
       extension: [".js", ".jsx", ".ts", ".tsx"],
       cypress: true,
+      forceBuildInstrument: true,
     }),
   ],
   server: {
