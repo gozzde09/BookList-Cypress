@@ -10,18 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      database:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: postgres
         options: >-
-          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
-          --health-interval=10s
-          --health-retries=5
-          --health-start-period=30s
-          --health-timeout=5s
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
         ports:
           - 5432:5432
 
