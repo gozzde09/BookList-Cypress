@@ -55,10 +55,8 @@ services:
       - frontend
     working_dir: /frontend
     environment:
-      # pass base url to test pointing at the web application
       - CYPRESS_baseUrl=http://frontend-book
-    # share the current folder as volume to avoid copying
-    volumes: # component testlerini bağla
+    volumes:
       - ./frontend:/frontend
       - ./coverage:/coverage
       - ./frontend/.nyc_output:/frontend/.nyc_output
@@ -66,8 +64,6 @@ services:
       - .:/app
     networks:
       - book-net
-    command: |
-      - sh -c "npm ci && npx cypress run --component"
 
 networks:
   book-net:

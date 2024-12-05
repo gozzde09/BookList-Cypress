@@ -32,16 +32,18 @@ jobs:
           docker compose ps &
           sleep 30
 
-      - name: Run Cypress E2E Tests
-        run: |
-          echo "Running Cypress E2E Tests"
-          docker compose run cypress npx cypress run --e2e
+      - name: Install dependencies
+        run: docker compose run cypress sh -c "rm -rf node_modules && npm ci"
 
+        # Steg 6: Kör End-to-End (E2E) tester med Cypress
+      - name: Run Cypress E2E tests
+        working-directory: frontend
+        run: npm run test --spec 'cypress/e2e/**/*'
+
+      # Steg 7: Kör komponenttester med Cypress
       - name: Run Cypress Component Tests
-        run: |
-          echo "Running Cypress Component Tests"
-          docker compose run cypress npm ci
-          docker compose run cypress npx cypress run --component
+        working-directory: frontend
+        run: npm run test --component
 
       - name: Tear down Docker Compose
         if: always()
