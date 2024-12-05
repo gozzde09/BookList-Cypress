@@ -71,3 +71,4 @@ networks:
 
 #https://www.cypress.io/blog/run-cypress-with-a-single-docker-command
 #docker compose up --exit-code-from cypress
+#docker-compose run --rm cypress

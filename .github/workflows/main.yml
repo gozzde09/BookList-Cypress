@@ -10,20 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-    postgres:
-      image: postgres:latest
-      env:
-        POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
-        POSTGRES_DB: ${{ secrets.DB_NAME }}
-        POSTGRES_USER: ${{ secrets.DB_USER }}
-      options: >-
-        --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
-        --health-interval=10s
-        --health-retries=5
-        --health-start-period=30s
-        --health-timeout=5s
-      ports:
-        - 5432:5432
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
+          --health-interval=10s
+          --health-retries=5
+          --health-start-period=30s
+          --health-timeout=5s
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout repository
@@ -47,12 +47,12 @@ jobs:
       - name: Install dependencies
         run: docker compose run cypress sh -c "rm -rf node_modules && npm ci"
 
-        # Steg 6: Kör End-to-End (E2E) tester med Cypress
+      # Step 6: Run End-to-End (E2E) tests with Cypress
       # - name: Run Cypress E2E tests
       #   working-directory: frontend
       #   run: npm run test --spec 'cypress/e2e/**/*'
 
-      # # Steg 7: Kör komponenttester med Cypress
+      # Step 7: Run component tests with Cypress
       # - name: Run Cypress Component Tests
       #   working-directory: frontend
       #   run: npm run test --component
