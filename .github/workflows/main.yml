@@ -13,9 +13,9 @@ jobs:
       database:
         image: postgres:latest
         env:
-           - POSTGRES_PASSWORD=${PASSWORD}
-           - POSTGRES_DB=${DB_NAME}
-           - POSTGRES_USER=${DB_USER}
+          POSTGRES_PASSWORD=${PASSWORD}
+          POSTGRES_DB=${DB_NAME}
+          POSTGRES_USER=${DB_USER}
         options: >-
           --health-cmd "pg_isready -U ${DB_USER}"
           --health-interval 10s
