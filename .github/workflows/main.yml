@@ -36,26 +36,13 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml up -d
 
-      # - name: Build Docker Compose services
-      #   run: docker compose build
-
       - name: Wait for services to become healthy
         run: |
-          docker compose ps &
+          docker-compose ps
           sleep 30
 
       - name: Install dependencies
-        run: docker compose run cypress sh -c "rm -rf node_modules && npm ci"
-
-      # Step 6: Run End-to-End (E2E) tests with Cypress
-      # - name: Run Cypress E2E tests
-      #   working-directory: frontend
-      #   run: npm run test --spec 'cypress/e2e/**/*'
-
-      # Step 7: Run component tests with Cypress
-      # - name: Run Cypress Component Tests
-      #   working-directory: frontend
-      #   run: npm run test --component
+        run: docker-compose run cypress sh -c "rm -rf node_modules && npm ci"
 
       - name: Run Cypress Tests
         run: |

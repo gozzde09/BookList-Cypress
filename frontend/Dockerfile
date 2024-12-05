@@ -18,4 +18,4 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-CMD ["npx", "cypress", "run", "--component"]
+CMD ["npx", "cypress", "run"]
