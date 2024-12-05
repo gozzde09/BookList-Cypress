@@ -8,11 +8,10 @@ services:
       - '80:80'
     depends_on:
       - backend
-    volumes:
-      - ./frontend/cypress:/app/cypress
-      - ./frontend/.nyc_output:/app/.nyc_output
-      - ./frontend/coverage:/app/coverage
-      - ./frontend/results:/app/results
+    healthcheck:
+      # test: curl --silent --fail http://localhost || exit 1
+      interval: 10s
+      retries: 5
     networks:
       - book-net
 
@@ -47,6 +46,26 @@ services:
     networks:
       - book-net
 
+  cypress:
+    # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
+    image: "cypress/included:12.0.0"
+    container_name: cypresstestsBook
+    depends_on:
+      - frontend
+    working_dir: /frontend
+    environment:
+      # pass base url to test pointing at the web application
+      - CYPRESS_baseUrl=http://frontend-book
+    # share the current folder as volume to avoid copying
+    volumes: # component testlerini bağla
+      - ./frontend:/frontend
+      - .:/app
+    networks:
+      - book-net
+
 networks:
   book-net:
     driver: bridge
+
+#https://www.cypress.io/blog/run-cypress-with-a-single-docker-command
+#docker compose up --exit-code-from cypress

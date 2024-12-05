@@ -23,13 +23,12 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Build Docker Compose services
-        run: docker-compose -f docker-compose.yml build
+        run: |
+          docker-compose -f docker-compose.yml build &
+          sleep 10
 
-      - name: Run Cypress tests in Docker Compose
-        run: docker-compose -f docker-compose.yml run cypress
-
-      - name: Run Cypress tests in Docker Compose
-        run: docker-compose -f docker-compose.yml run cypress # Run the Cypress tests
+      - name: Run Cypress E2E tests
+        run: docker compose up --exit-code-from cypress
 
       - name: Shutdown Docker Compose
         run: docker-compose -f docker-compose.yml down # Clean up after the tests

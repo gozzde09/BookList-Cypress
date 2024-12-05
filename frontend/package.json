@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
-    "test": "npx cypress run"
+    "test": "npx cypress run",
+    "test-open": "npx cypress run"
   },
   "dependencies": {
     "@types/bootstrap": "^5.2.10",
