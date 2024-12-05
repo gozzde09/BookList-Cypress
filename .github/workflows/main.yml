@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   cypress-run:
@@ -16,11 +13,11 @@ jobs:
       database:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: test_db
-          POSTGRES_USER: test_user
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
         options: >-
-          --health-cmd "pg_isready -U test_user"
+          --health-cmd "pg_isready -U ${{ secrets.DB_USER }}"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
@@ -47,9 +44,11 @@ jobs:
           sleep 15
       - name: Run Cypress Component Tests
         run: |
+          echo "Using PGURI: $PGURI"
           docker compose run cypress npx cypress run --component
       - name: Run Cypress E2E Tests
         run: |
+          echo "Using PGURI: $PGURI"
           docker compose run cypress npx cypress run --e2e
       - name: Tear down Docker Compose
         if: always()
