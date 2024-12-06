@@ -5,6 +5,7 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "concurrently \"nodemon index.js\" \"npx tsc --watch\"",
+    "tsc": " npx tsc --watch",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
