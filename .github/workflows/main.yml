@@ -13,27 +13,37 @@ jobs:
       database:
         image: postgres:latest
         env:
-          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: secret
           POSTGRES_DB: postgres
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
+          POSTGRES_USER: postgres
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
 
       - name: Set up Docker Compose environment
         run: |
-          docker compose -f docker-compose.yml up -d
+          docker compose up -d
+           env:
+          PASSWORD: secret
+          DB_NAME: postgres
+          DB_USER: postgres
+          PGURI: postgres://postgres:secret@localhost:5432/postgres
 
       - name: Wait for services to become healthy
         run: |
