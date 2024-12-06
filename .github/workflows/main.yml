@@ -47,11 +47,6 @@ jobs:
       - name: Build containers
         run: |
           docker compose up --build -d
-          docker compose ps
-          docker compose exec database pg_isready -U postgres
-          sleep 30
-          docker compose exec -T frontend npx cypress run
-          docker compose down
 
       - name: Wait for PostgreSQL to be ready
         run: |
