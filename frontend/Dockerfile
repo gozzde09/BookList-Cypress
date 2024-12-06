@@ -2,7 +2,7 @@
 # Build frontend with Node.js
 FROM node AS build
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 RUN npm install --verbose
 RUN npm run build
 
