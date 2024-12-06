@@ -20,7 +20,7 @@ describe("My BookList app", function () {
     });
   });
   it("renders two specific books", () => {
-    cy.request("GET", "http://localhost/api/books").then((response) => {
+    cy.request("GET", "/api/books").then((response) => {
       const books = response.body;
       const titles = books.map((book) => book.title);
       expect(titles).to.include("To Kill a Mockingbird");
@@ -37,7 +37,7 @@ describe("My BookList app", function () {
     });
   });
   it("renders a specific language", () => {
-    cy.request("GET", "http://localhost/api/languages").then((response) => {
+    cy.request("GET", "/api/languages").then((response) => {
       const languages = response.body;
       const languageNames = languages.map((language) => language.name);
       expect(languageNames).to.include("English");
