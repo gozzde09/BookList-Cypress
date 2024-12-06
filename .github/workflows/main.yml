@@ -42,7 +42,9 @@ jobs:
         run: npm install
       - name: Install dependencies
         working-directory: backend
-        run: npm install
+        run: |
+          npm install &
+          npm run dev
 
       - name: Build containers
         run: |
