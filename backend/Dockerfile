@@ -1,5 +1,6 @@
 
-FROM node:16 AS backend
+FROM node:14 AS backend
+COPY . /app
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --verbose
