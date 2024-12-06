@@ -31,7 +31,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "18.18.0"
+      - name: Print environment variables
+        run: printenv | grep POSTGRES
 
       - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
@@ -44,6 +46,11 @@ jobs:
           DB_NAME: postgres
           DB_USER: postgres
           PGURI: postgres://postgres:secret@localhost:5432/postgres
+
+      - name: Display database logs
+        run: docker logs databaseBook || echo "No logs available"
+      - name: Start Docker Compose with verbose output
+        run: docker-compose up --build --force-recreate --renew-anon-volumes || echo "Compose failed"
 
       - name: Wait for services to become healthy
         run: |
@@ -60,3 +67,5 @@ jobs:
       - name: Stop and remove containers
         run: |
           docker compose down
+
+# https://docs.github.com/en/actions/use-cases-and-examples/using-containerized-services/creating-postgresql-service-containers
