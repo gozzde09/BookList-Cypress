@@ -25,19 +25,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.18.0"
+
       - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
-      - name: Set up Docker Compose
+
+      - name: Set up containers
         run: |
-          docker-compose up -d database
-          docker-compose up -d backend
-          docker-compose up -d frontend
+          docker compose up -d database
+          docker compose up -d backend
+          docker compose up -d frontend
 
       - name: Wait for services to be ready
         run: |
-          docker-compose exec database pg_isready -U ${{ secrets.DB_USER }}
+          docker compose exec database pg_isready -U ${{ secrets.DB_USER }}
           sleep 30
 
       - name: Run Cypress tests
-        run: docker-compose run --rm cypress
+        run: docker compose run --rm cypress
 # https://docs.github.com/en/actions/use-cases-and-examples/using-containerized-services/creating-postgresql-service-containers
