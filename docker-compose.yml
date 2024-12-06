@@ -4,9 +4,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend-book
-    environment:
-    - NODE_ENV=development
-    - VITE_COVERAGE=true
     ports:
       - '80:80'
     depends_on:
@@ -39,8 +36,6 @@ services:
       test: 'pg_isready -U ${DB_USER}'
       interval: 30s
       retries: 5
-      start_period: 30s
-      timeout: 5s
     volumes:
       - ./data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -71,4 +66,4 @@ networks:
 
 #https://www.cypress.io/blog/run-cypress-with-a-single-docker-command
 #docker compose up --exit-code-from cypress
-#docker-compose run --rm cypress
+#docker compose run --rm cypress
