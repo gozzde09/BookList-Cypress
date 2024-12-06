@@ -62,7 +62,17 @@ jobs:
 
       # - name: Run Component Tests
       #   run: docker compose run cypress npx cypress run --component
+      - name: Run E2E tests with spec
+        uses: cypress-io/github-action@v5
+        with:
+          spec: "cypress/e2e/**/*" # E2E test dosyalarının yolu
+      - name: Cypress run E2E
+        uses: cypress-io/github-action@v6
 
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          component: true # Component test dosyalarının yolu
       - name: Stop and remove containers
         run: |
           docker compose down
