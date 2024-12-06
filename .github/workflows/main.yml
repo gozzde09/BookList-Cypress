@@ -39,7 +39,7 @@ jobs:
       - name: Set up Docker Compose environment
         run: |
           docker compose up -d
-           env:
+        env:
           PASSWORD: secret
           DB_NAME: postgres
           DB_USER: postgres
