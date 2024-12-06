@@ -6,8 +6,10 @@ on:
       - main
 
 jobs:
-  test:
+  tests:
     runs-on: ubuntu-latest
+
+    # PostgreSQL konfiguration
     services:
       postgres:
         image: postgres:latest
@@ -19,62 +21,73 @@ jobs:
           - "5432:5432"
         options: >-
           --health-cmd="bash -c 'pg_isready -U postgres'"
-          --health-interval=30s
-          --health-timeout=5s
-          --health-retries=5
+          --health-interval=30s # Intervall för hälsokontroll
+          --health-timeout=5s # Timeout för hälsokontroll
+          --health-retries=5 # Antal försök för hälsokontroll
+
     steps:
+      # Steg 1: Klona projektet från repository
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # Steg 2: Installera Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
+      # Steg 3: Sätt miljövariabler
       - name: Set secrets as environment variables
         run: |
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+
+      # Steg 4: Setup Docker Compose
       - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
+
+      # Steg 5: Installera frontend-beroenden
       - name: Install Frontend dependencies
         working-directory: frontend
         run: npm install
+
+      # Steg 6: Installera backend-beroenden
       - name: Install Backend dependencies
         working-directory: backend
-        run: |
-          npm install
+        run: npm install
+
+      # Steg 7: Bygg Docker-containrar
       - name: Build containers
         run: docker compose up --build -d
 
+      # Steg 8: Vänta tills PostgreSQL är redo
       - name: Wait for PostgreSQL to be ready
         run: |
           docker compose exec database pg_isready -U ${{ secrets.DB_USER }}
           sleep 30
+
+      # Steg 9: Vänta tills alla tjänster är redo
       - name: Wait for services to be ready
         run: |
           docker compose ps
           docker compose exec database pg_isready -U postgres
           sleep 30
+
+      # Steg 10: Kör alla tester via Docker Compose
       - name: Run tests
         run: docker compose up --exit-code-from cypress
-      # - name: Run End-to-End Tests
-      #   run: docker compose run cypress npx cypress run --spec "cypress/e2e/**/*"
 
-      # - name: Run Component Tests
-      #   run: docker compose run cypress npx cypress run --component
-      - name: Run E2E tests with spec
-        uses: cypress-io/github-action@v5
-        with:
-          spec: "cypress/e2e/**/*" # E2E test dosyalarının yolu
+      # Steg 11: Kör Cypress för E2E-tester
       - name: Cypress run E2E
         uses: cypress-io/github-action@v6
 
+      # Steg 12: Kör Cypress för komponenttester
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          component: true # Component test dosyalarının yolu
-      - name: Stop and remove containers
-        run: |
-          docker compose down
+          component: true
 
-# https://docs.github.com/en/actions/use-cases-and-examples/using-containerized-services/creating-postgresql-service-containers
+      # Steg 14: Stoppa och ta bort Docker-containrar
+      - name: Stop and remove containers
+        run: docker compose down
