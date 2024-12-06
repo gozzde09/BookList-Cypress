@@ -53,16 +53,20 @@ jobs:
       - name: Wait for frontend to be ready
         run: |
           npx wait-on http://localhost
-      - name: Run tests
+      - name: Run E2E tests
         run: docker compose up --exit-code-from cypress
+
       - name: Run Cypress E2E tests
         working-directory: frontend
-        run: npm run test --spec 'cypress/e2e/**/*' # Kör E2E-tester
+        run: |
+          docker compose up &
+          npm run test --spec 'cypress/e2e/**/*' # Kör E2E-tester
 
       # Steg 7: Kör komponenttester med Cypress
       - name: Run Cypress Component Tests
-        working-directory: frontend
-        run: npm run test --component # Kör komponenttester
+        run: |
+          docker compose up &
+          npm run test --component # Kör komponenttester
 
       - name: Stop and remove containers
         run: |
