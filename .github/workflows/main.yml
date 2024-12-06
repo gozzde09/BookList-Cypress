@@ -64,6 +64,7 @@ jobs:
 
       # Steg 7: Kör komponenttester med Cypress
       - name: Run Cypress Component Tests
+        working-directory: frontend
         run: |
           docker compose up &
           npm run test --component # Kör komponenttester
