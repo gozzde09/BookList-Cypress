@@ -37,20 +37,20 @@ jobs:
         working-directory: frontend
         run: npm install
 
-      - name: Set up Docker Compose
-        run: |
-          docker compose up --build -d
+      # - name: Set up Docker Compose
+      #   run: |
+      #     docker compose up --build -d
 
       - name: Wait for PostgreSQL to be ready
         run: |
           docker compose exec database pg_isready -U ${{ secrets.DB_USER }}
           sleep 30
 
-      - name: Wait for services to be ready
-        run: |
-          docker compose ps
-          docker compose exec database pg_isready -U postgres
-          sleep 30
+      # - name: Wait for services to be ready
+      #   run: |
+      #     docker compose ps
+      #     docker compose exec database pg_isready -U postgres
+      #     sleep 30
       - name: Wait for localhost to be ready
         run: |
           echo "Waiting for localhost to be ready..."
@@ -59,6 +59,8 @@ jobs:
             sleep 5
           done
           echo "Server is up and running!"
+      - name: Run tests
+        run: docker compose up --exit-code-from cypress
       - name: Run Cypress E2E tests
         working-directory: frontend
         run: npm run test --spec 'cypress/e2e/**/*'
