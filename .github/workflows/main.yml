@@ -37,7 +37,7 @@ jobs:
         working-directory: frontend
         run: npm install
 
-      - name: Set up Docker Compose
+      - name: Build containers
         run: |
           docker compose up --build -d
 
@@ -51,14 +51,14 @@ jobs:
           docker compose ps
           docker compose exec database pg_isready -U postgres
           sleep 30
-      - name: Wait for localhost to be ready
-        run: |
-          echo "Waiting for localhost to be ready..."
-          until curl -s http://localhost:3000; do
-            echo "Waiting for server..."
-            sleep 5
-          done
-          echo "Server is up and running!"
+      # - name: Wait for localhost to be ready
+      #   run: |
+      #     echo "Waiting for localhost to be ready..."
+      #     until curl -s http://localhost:3000; do
+      #       echo "Waiting for server..."
+      #       sleep 5
+      #     done
+      #     echo "Server is up and running!"
       - name: Run tests
         run: docker compose up --exit-code-from cypress
       - name: Run Cypress E2E tests
