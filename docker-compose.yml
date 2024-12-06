@@ -31,10 +31,8 @@ services:
   database:
     image: postgres:latest
     container_name: databaseBook
-    environment:
-      - POSTGRES_PASSWORD=${PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
+    env_file:
+    - .env
     healthcheck:
       test: 'pg_isready -U ${DB_USER}'
       interval: 10s
