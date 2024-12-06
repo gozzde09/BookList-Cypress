@@ -11,20 +11,25 @@ describe("My BookList app", function () {
     //VISIT THE PAGE
     cy.visit("/");
   });
+
+  //BACKEND
   // Fetch Books - Riktig databas
   it("fetches the books from the database", () => {
     cy.request("GET", "/api/books").then((response) => {
-      expect(response.status).to.eq(200);
+      expect(response.status).to.eq(200); // response OK
       expect(response.body).to.be.an("array");
       expect(response.body).to.have.length.greaterThan(0);
     });
   });
-  it("renders two specific books", () => {
+  it("renders a specific book and author", () => {
     cy.request("GET", "/api/books").then((response) => {
       const books = response.body;
+
       const titles = books.map((book) => book.title);
       expect(titles).to.include("To Kill a Mockingbird");
-      expect(titles).to.include("Moby Dick");
+
+      const authors = books.map((book) => book.author);
+      expect(authors).to.include("Orhan Pamuk");
     });
   });
 
@@ -32,8 +37,7 @@ describe("My BookList app", function () {
   it("fetches the languages from the database", () => {
     cy.request("GET", "/api/languages").then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.be.an("array");
-      expect(response.body).to.have.length.greaterThan(0);
+      expect(response.body).to.eq(10); // 10 språk
     });
   });
   it("renders a specific language", () => {
@@ -43,6 +47,8 @@ describe("My BookList app", function () {
       expect(languageNames).to.include("English");
     });
   });
+
+  //FRONTEND
   //Table-headers
   it("renders table headers correctly", () => {
     cy.get("th").eq(1).should("contain", "Book Title");
@@ -62,6 +68,7 @@ describe("My BookList app", function () {
       expect(data.response.body).to.have.length(10); // Equal 10
     });
   });
+
   //Books
   it("render more than two books", () => {
     cy.get("td").should("have.length.greaterThan", 2);

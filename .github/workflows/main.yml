@@ -67,16 +67,14 @@ jobs:
     steps:
       # Run Cypress End-to-End tests
       - name: Run Cypress E2E tests
-        working-directory: frontend
         run: |
-          docker compose up &
+          docker compose -f docker-compose.yml up -d
           npm run test --spec 'cypress/e2e/**/*'
 
       # Run Cypress Component tests
       - name: Run Cypress Component Tests
-        working-directory: frontend
         run: |
-          docker compose up &
+          docker compose -f docker-compose.yml up -d
           npm run test --component
 
       # Stop and remove containers after tests

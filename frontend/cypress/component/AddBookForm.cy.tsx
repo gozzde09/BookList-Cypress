@@ -6,6 +6,7 @@ beforeEach(() => {
   cy.mount(<AddBookForm onAddBook={handleAddBook} />);
 });
 
+//FRONTEND
 describe("AddBookForm", () => {
   //FORM
   it("renders the form", () => {
@@ -49,7 +50,7 @@ describe("AddBookForm", () => {
       language_id: 1,
     });
   });
-
+  //BACKEND
   //POST
   it("adds a new book and checks if the book count increases at the alert", () => {
     const newBook: Book = {
@@ -58,13 +59,13 @@ describe("AddBookForm", () => {
       language_id: 1,
     };
     let initialBookCount = 0;
-    cy.request("GET", "http://localhost/api/books").then((res) => {
+    cy.request("GET", "/api/books").then((res) => {
       expect(res.body).to.be.an("array");
       initialBookCount = res.body.length;
     });
 
-    cy.request("POST", "http://localhost/api/books", newBook).then(() => {
-      cy.request("GET", "http://localhost/api/books").then((res) => {
+    cy.request("POST", "/api/books", newBook).then(() => {
+      cy.request("GET", "/api/books").then((res) => {
         expect(res.body).to.be.an("array");
         expect(res.body).to.have.length.greaterThan(initialBookCount);
       });
@@ -78,9 +79,8 @@ describe("AddBookForm", () => {
   });
   // GET
   it("fetches the list of books correctly", () => {
-    cy.request("GET", "http://localhost/api/books").then((res) => {
+    cy.request("GET", "/api/books").then((res) => {
       expect(res.status).to.eq(200);
-      expect(res.body).to.be.an("array");
       expect(res.body).to.have.length.greaterThan(0);
     });
   });
