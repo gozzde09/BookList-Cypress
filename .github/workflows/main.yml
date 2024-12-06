@@ -26,6 +26,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
       - name: Set secrets as environment variables
         run: |
           echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
@@ -51,14 +55,6 @@ jobs:
           docker compose ps
           docker compose exec database pg_isready -U postgres
           sleep 30
-      # - name: Wait for localhost to be ready
-      #   run: |
-      #     echo "Waiting for localhost to be ready..."
-      #     until curl -s http://localhost:3000; do
-      #       echo "Waiting for server..."
-      #       sleep 5
-      #     done
-      #     echo "Server is up and running!"
       - name: Run tests
         run: docker compose up --exit-code-from cypress
       - name: Run Cypress E2E tests
