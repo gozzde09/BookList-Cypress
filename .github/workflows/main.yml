@@ -26,11 +26,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      # - name: Set secrets as environment variables
-      #   run: |
-      #     echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-      #     echo "DB_PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
-      #     echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
+      - name: Set secrets as environment variables
+        run: |
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
       - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
       - name: Install dependencies
