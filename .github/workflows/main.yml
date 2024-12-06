@@ -18,7 +18,7 @@ jobs:
         ports:
           - "5432:5432"
         options: >-
-          --health-cmd=`pg_isready -U postgres`
+          --health-cmd="bash -c 'pg_isready -U postgres'"
           --health-interval=30s
           --health-timeout=5s
           --health-retries=5
@@ -55,12 +55,11 @@ jobs:
         run: docker compose run --rm cypress
       - name: Run Cypress E2E tests
         working-directory: frontend
-        run: npm run test --spec 'cypress/e2e/**/*' # Kör E2E-tester
+        run: npm run test --spec 'cypress/e2e/**/*'
 
-      # Steg 7: Kör komponenttester med Cypress
       - name: Run Cypress Component Tests
         working-directory: frontend
-        run: npm run test --component # Kör komponenttester
+        run: npm run test --component
 
       - name: Stop and remove containers
         run: |
