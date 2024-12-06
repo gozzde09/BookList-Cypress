@@ -11,7 +11,38 @@ describe("My BookList app", function () {
     //VISIT THE PAGE
     cy.visit("/");
   });
+  // Fetch Books - Riktig databas
+  it("fetches the books from the database", () => {
+    cy.request("GET", "/api/books").then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.be.an("array");
+      expect(response.body).to.have.length.greaterThan(0);
+    });
+  });
+  it("renders two specific books", () => {
+    cy.request("GET", "http://localhost/api/books").then((response) => {
+      const books = response.body;
+      const titles = books.map((book) => book.title);
+      expect(titles).to.include("To Kill a Mockingbird");
+      expect(titles).to.include("Moby Dick");
+    });
+  });
 
+  // Fetch Languages - Riktig databas
+  it("fetches the languages from the database", () => {
+    cy.request("GET", "/api/languages").then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.be.an("array");
+      expect(response.body).to.have.length.greaterThan(0);
+    });
+  });
+  it("renders a specific language", () => {
+    cy.request("GET", "http://localhost/api/languages").then((response) => {
+      const languages = response.body;
+      const languageNames = languages.map((language) => language.name);
+      expect(languageNames).to.include("English");
+    });
+  });
   //Table-headers
   it("renders table headers correctly", () => {
     cy.get("th").eq(1).should("contain", "Book Title");
@@ -31,7 +62,6 @@ describe("My BookList app", function () {
       expect(data.response.body).to.have.length(10); // Equal 10
     });
   });
-
   //Books
   it("render more than two books", () => {
     cy.get("td").should("have.length.greaterThan", 2);

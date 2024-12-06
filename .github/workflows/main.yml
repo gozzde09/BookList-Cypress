@@ -59,7 +59,8 @@ jobs:
         # Frontend dizinine geçip E2E testlerini çalıştırma
       - name: Run E2E tests
         run: |
-          cd frontend && npm run dev # Frontend dizinine gidip npm run dev çalıştırıyoruz
+          cd frontend && npm run dev &
+          run: npm run test --spec 'cypress/e2e/**/*' # Kör E2E-tester
         env:
           CYPRESS_baseUrl: http://localhost
 

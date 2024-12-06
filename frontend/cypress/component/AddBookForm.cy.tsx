@@ -62,6 +62,7 @@ describe("AddBookForm", () => {
       expect(res.body).to.be.an("array");
       initialBookCount = res.body.length;
     });
+
     cy.request("POST", "http://localhost/api/books", newBook).then(() => {
       cy.request("GET", "http://localhost/api/books").then((res) => {
         expect(res.body).to.be.an("array");
@@ -73,6 +74,14 @@ describe("AddBookForm", () => {
       expect(alertText).to.contain(
         `${initialBookCount + 1} book(s) to read now!`
       );
+    });
+  });
+  // GET
+  it("fetches the list of books correctly", () => {
+    cy.request("GET", "http://localhost/api/books").then((res) => {
+      expect(res.status).to.eq(200);
+      expect(res.body).to.be.an("array");
+      expect(res.body).to.have.length.greaterThan(0);
     });
   });
 });
