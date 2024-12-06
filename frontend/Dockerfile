@@ -4,6 +4,7 @@ FROM node AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --verbose
+COPY . .
 RUN npm run build
 
 # use frontend and conf. proxy with NGINX
