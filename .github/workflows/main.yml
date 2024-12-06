@@ -17,6 +17,10 @@ jobs:
     services:
       database:
         image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
         ports:
           - 5432:5432
         options: >-
@@ -40,6 +44,10 @@ jobs:
       - name: Set up Docker Compose environment
         run: |
           docker compose up --build -d
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
 
       - name: Display database logs
         run: docker logs databaseBook || echo "No logs available"
