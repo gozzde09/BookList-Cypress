@@ -12,22 +12,33 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: secret
-          POSTGRES_DB: postgres
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
         ports:
           - "5432:5432"
-
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd=`pg_isready -U postgres`
           --health-interval=30s
           --health-timeout=5s
           --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Set secrets as environment variables
+        run: |
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
       - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          docker compose exec database pg_isready -U ${{ secrets.DB_USER }}
+          sleep 30
+
       - name: Set up Docker Compose
         run: |
           docker compose up --build -d database
