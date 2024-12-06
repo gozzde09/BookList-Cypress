@@ -57,11 +57,19 @@ jobs:
           sleep 30
       - name: Run tests
         run: docker compose up --exit-code-from cypress
-      # - name: Run End-to-End Tests
-      #   run: docker compose run cypress npx cypress run --spec "cypress/e2e/**/*"
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev # Eğer frontend için özel bir komut varsa, burayı değiştirin
+          wait-on: http://localhost # Test edilecek URL
+          wait-on-timeout: 60
 
-      # - name: Run Component Tests
-      #   run: docker compose run cypress npx cypress run --component
+      # Cypress Component testlerini çalıştırma
+      - name: Run Component Testing
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          component: true
 
       - name: Stop and remove containers
         run: |
