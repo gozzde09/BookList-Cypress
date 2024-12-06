@@ -29,9 +29,9 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Set up Docker Compose
         run: |
-          docker-compose up -d database
-          docker-compose up -d backend
-          docker-compose up -d frontend
+          docker compose up --build -d database
+          docker compose up --build -d backend
+          docker compose up --build -d frontend
 
       - name: Wait for services to be ready
         run: |
