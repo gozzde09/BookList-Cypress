@@ -43,8 +43,7 @@ jobs:
       - name: Install Backend dependencies
         working-directory: backend
         run: |
-          npm install &
-          npm run tsc
+          npm install
 
       - name: Build containers
         run: docker compose up --build -d
