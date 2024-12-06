@@ -37,7 +37,7 @@ describe("My BookList app", function () {
   it("fetches the languages from the database", () => {
     cy.request("GET", "/api/languages").then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.eq(10); // 10 språk
+      expect(response.body).to.eq(11); // 11 språk
     });
   });
   it("renders a specific language", () => {
@@ -65,7 +65,7 @@ describe("My BookList app", function () {
   });
   it("fetches the languages", () => {
     cy.wait("@getLanguages").then((data) => {
-      expect(data.response.body).to.have.length(10); // Equal 10
+      expect(data.response.body).to.have.length(10); // Equal 10 at the webbsida
     });
   });
 

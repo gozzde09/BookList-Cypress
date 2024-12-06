@@ -69,13 +69,13 @@ jobs:
       - name: Run Cypress E2E tests
         run: |
           docker compose -f docker-compose.yml up -d
-          npm run test --spec 'cypress/e2e/**/*'
+          npm run test:e2e --spec 'cypress/e2e/**/*'
 
       # Run Cypress Component tests
       - name: Run Cypress Component Tests
         run: |
           docker compose -f docker-compose.yml up -d
-          npm run test --component
+          npm run test:component
 
       # Stop and remove containers after tests
       - name: Stop and remove containers
