@@ -31,11 +31,13 @@ services:
   database:
     image: postgres:latest
     container_name: databaseBook
-    env_file:
-    - .env
+    environment:
+      - POSTGRES_PASSWORD=${PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
     healthcheck:
       test: 'pg_isready -U ${DB_USER}'
-      interval: 10s
+      interval: 30s
       retries: 5
       start_period: 30s
       timeout: 5s
@@ -47,7 +49,6 @@ services:
     restart: always
 
   cypress:
-    # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
     image: "cypress/included:12.0.0"
     container_name: cypresstestsBook
     depends_on:
