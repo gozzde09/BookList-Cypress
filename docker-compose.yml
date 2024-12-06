@@ -46,23 +46,6 @@ services:
       - book-net
     restart: always
 
-  pgadmin:
-    container_name: demo_pgadmin
-    image: "dpage/pgadmin4:4.24"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-      - ./docker_pgadmin_servers.json:/pgadmin4/servers.json
-    ports:
-      - "15433:80"
-    restart: unless-stopped
-    networks:
-      - book-net
-
   cypress:
     # the Docker image to use from https://github.com/cypress-io/cypress-docker-images
     image: "cypress/included:12.0.0"
@@ -85,11 +68,6 @@ networks:
   book-net:
     driver: bridge
 
-volumes:
-  pgadmin:
-    driver: local
-  pgdata:
-    driver: local
 #https://www.cypress.io/blog/run-cypress-with-a-single-docker-command
 #docker compose up --exit-code-from cypress
 #docker-compose run --rm cypress
