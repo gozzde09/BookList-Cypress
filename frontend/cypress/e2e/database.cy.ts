@@ -71,10 +71,10 @@ describe("API: Book List App", () => {
       const books = res.body;
 
       const titles = books.map((book: Book) => book.title);
-      expect(titles).to.include("New Book");
+      expect(titles).to.include("New Book to database");
 
       const authors = books.map((book: Book) => book.author);
-      expect(authors).to.include("John Doe");
+      expect(authors).to.include("John Database");
     });
   });
 });
