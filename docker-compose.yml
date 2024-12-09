@@ -53,15 +53,13 @@ services:
     container_name: cypresstestsBook
     depends_on:
       - frontend
-    working_dir: /frontend
-    environment:
-      - CYPRESS_baseUrl=http://frontend-book
+    working_dir: /app  # Doğru dizinde çalışması için /app olarak değiştirdim
     volumes:
-      - ./frontend:/frontend
-      - ./coverage:/coverage
-      - ./frontend/.nyc_output:/frontend/.nyc_output
-      - ./coverage:/coverage
-      - .:/app
+      - ./frontend:/app  # frontend dizinini /app'e bağla
+      - ./coverage:/coverage  # coverage dosyasına erişim
+      - ./frontend/coverage:/app/coverage  # frontend coverage dizinine erişim
+      - ./frontend/.nyc_output:/app/.nyc_output  # nyc_output dosyasına erişim
+      - .:/app  # Proje dizinini /app'e bağla
     networks:
       - book-net
 

@@ -41,6 +41,7 @@ export default function HomeView() {
           "Content-Type": "application/json",
         },
       });
+      getBooks();
     } catch (error) {
       console.error("Error adding book:", error);
     }

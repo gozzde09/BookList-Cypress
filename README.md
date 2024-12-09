@@ -22,6 +22,7 @@ Funktioner som testas med Cypress
 3. API-integrationer
 
    GET /api/books: Hämta en lista över böcker och verifiera att de renderas korrekt i tabellen.
+   GET /api/books: Hämta en lista över böcker och verifiera att rätt författare hämtas korrekt från tabellen.
    GET /api/languages: Hämta språkalternativ och kontrollera att rätt språk visas i dropdown-menyn.
    POST /api/books: Lägg till en ny bok och verifiera att datan uppdateras korrekt.
 
@@ -37,11 +38,13 @@ Funktioner som testas med Cypress
 
 ## Installation
 
-1-Kör `npm install` manuellt i både frontend- och backend-mapparna.
+1-Kör `npm install` manuellt i både frontend- och backend-mapparna, om det behövs.
 2-Starta Docker Desktop.
 3-Kör `docker compose up --build -d` i projektets root-mapp.
-4-Starta projektet med `docker compose up -d`
-5-Applikationen är nu tillgänglig på `http://localhost/`. Tester skrev enligt denna adressen.
-6-Starta Cypress genom att köra `npx cypress open` i terminalen.
+4-Applikationen är nu tillgänglig på `http://localhost/`. Tester skrevs enligt denna adressen.
+5-Starta Cypress genom att köra `npx cypress open` i terminalen.
+6- Eller headless versioner från consolen :
+`npm run test:component --headless`
+`npm run test:e2e `
 
 # Gözde Akgün JSU23

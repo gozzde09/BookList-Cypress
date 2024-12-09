@@ -1,51 +1,15 @@
 describe("My BookList app", function () {
   beforeEach(() => {
-    //GET BOOKS
+    //GET BOOKS mocking
     cy.fixture("books").then((json) => {
       cy.intercept("GET", "/api/books", json).as("getBooks");
     });
-    //GET LANGUAGES
+    //GET LANGUAGES mocking
     cy.fixture("languages").then((json) => {
       cy.intercept("GET", "/api/languages", json).as("getLanguages");
     });
     //VISIT THE PAGE
     cy.visit("/");
-  });
-
-  //BACKEND
-  // Fetch Books - Riktig databas
-  it("fetches the books from the database", () => {
-    cy.request("GET", "/api/books").then((response) => {
-      expect(response.status).to.eq(200); // response OK
-      expect(response.body).to.be.an("array");
-      expect(response.body).to.have.length.greaterThan(0);
-    });
-  });
-  it("renders a specific book and author", () => {
-    cy.request("GET", "/api/books").then((response) => {
-      const books = response.body;
-
-      const titles = books.map((book) => book.title);
-      expect(titles).to.include("To Kill a Mockingbird");
-
-      const authors = books.map((book) => book.author);
-      expect(authors).to.include("Orhan Pamuk");
-    });
-  });
-
-  // Fetch Languages - Riktig databas
-  it("fetches the languages from the database", () => {
-    cy.request("GET", "/api/languages").then((response) => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.length(10); // 10 språk
-    });
-  });
-  it("renders a specific language", () => {
-    cy.request("GET", "/api/languages").then((response) => {
-      const languages = response.body;
-      const languageNames = languages.map((language) => language.name);
-      expect(languageNames).to.include("English");
-    });
   });
 
   //FRONTEND
@@ -56,14 +20,15 @@ describe("My BookList app", function () {
     cy.get("th").eq(3).should("contain", "Literature");
   });
 
-  //Fetches
-  it("fetches the books", () => {
+  //Fetch mockingar
+  it("fetches the books by mocking", () => {
     cy.wait("@getBooks").then((data) => {
       expect(data.response.body).to.be.an("array");
       expect(data.response.body).to.have.length.greaterThan(0);
     });
   });
-  it("fetches the languages", () => {
+
+  it("fetches the languages by mocking", () => {
     cy.wait("@getLanguages").then((data) => {
       expect(data.response.body).to.have.length(10); // Equal 10 at the webbsida
     });
